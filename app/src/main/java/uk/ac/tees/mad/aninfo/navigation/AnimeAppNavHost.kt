@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import uk.ac.tees.mad.aninfo.ui.authentication.LoginScreen
 import uk.ac.tees.mad.aninfo.ui.splash.SplashScreen
 
 @Composable
@@ -13,7 +14,7 @@ fun AnimeAppNavHost(navController: NavHostController) {
             SplashScreen(navController = navController)
         }
         composable(Screen.Login.route) {
-
+            LoginScreen(navController = navController)
         }
         composable(Screen.Home.route) {
 

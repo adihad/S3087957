@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation ("androidx.navigation:navigation-compose")
+    implementation("androidx.compose.material:material-icons-extended-android:1.6.8")
 
     // Retrofit for network requests
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
