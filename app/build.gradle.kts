@@ -4,6 +4,7 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -82,11 +83,16 @@ dependencies {
 
     // Accompanist for permissions and navigation animations
     implementation ("com.google.accompanist:accompanist-permissions:0.31.0-alpha")
-    implementation ("com.google.accompanist:accompanist-navigation-animation:0.31.0-alpha")
 
     // Other dependencies
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation( "androidx.activity:activity-compose:1.8.0")
+
+    //Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-storage")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

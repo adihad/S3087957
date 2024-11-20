@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import uk.ac.tees.mad.aninfo.ui.authentication.LoginScreen
+import uk.ac.tees.mad.aninfo.ui.authentication.RegisterScreen
 import uk.ac.tees.mad.aninfo.ui.splash.SplashScreen
 
 @Composable
@@ -16,6 +17,10 @@ fun AnimeAppNavHost(navController: NavHostController) {
         composable(Screen.Login.route) {
             LoginScreen(navController = navController)
         }
+        composable(Screen.Register.route) {
+            RegisterScreen(navController = navController)
+        }
+
         composable(Screen.Home.route) {
 
         }

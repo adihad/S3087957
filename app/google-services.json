@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "546910477511",
+    "project_id": "ani-info-b03a2",
+    "storage_bucket": "ani-info-b03a2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546910477511:android:8cf3428a2dd5fdef5ab2e2",
+        "android_client_info": {
+          "package_name": "uk.ac.tees.mad.aninfo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy_piRkv0UGLxi7a8fzxhIfF6e7ZpRGEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

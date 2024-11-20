@@ -1,5 +1,6 @@
 package uk.ac.tees.mad.aninfo.ui.authentication
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -46,7 +46,7 @@ import uk.ac.tees.mad.aninfo.R
 import uk.ac.tees.mad.aninfo.navigation.Screen
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun RegisterScreen(navController: NavHostController) {
     val context = LocalContext.current
 
     Scaffold(
@@ -78,7 +78,7 @@ fun LoginScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(16.dp))
                 // Title
                 Text(
-                    text = "Welcome back to Ani-Info",
+                    text = "Welcome to Ani-Info",
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold,
                         color = Color.White
@@ -86,13 +86,30 @@ fun LoginScreen(navController: NavHostController) {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Enter your credentials to see anime info.",
+                    text = "Enter your details to see explore anime info.",
                     style = MaterialTheme.typography.titleMedium.copy(
                         color = Color.White
                     )
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
+                
+                // Name Text Field
+                var name by remember { mutableStateOf("") }
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text("Name", color = Color.White) },
+                    placeholder = { Text("Enter your full name", color = Color.Gray) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.White,
+                        unfocusedBorderColor = Color.Gray,
+                        focusedTextColor = Color.White
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // Email Text Field
                 var email by remember { mutableStateOf("") }
@@ -171,12 +188,12 @@ fun LoginScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Don't have an account? Sign Up",
+                    text = "Already have an account? Sign in",
                     color = Color.White,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.clickable {
-                        navController.navigate(Screen.Register.route) {
-                            popUpTo(Screen.Login.route) { inclusive = true }
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(Screen.Register.route) { inclusive = true }
                             launchSingleTop = true
                             restoreState = true
                         }
