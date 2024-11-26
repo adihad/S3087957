@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +28,8 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,13 +44,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import uk.ac.tees.mad.aninfo.R
 import uk.ac.tees.mad.aninfo.navigation.Screen
 
 @Composable
-fun RegisterScreen(navController: NavHostController) {
+fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel = hiltViewModel()) {
     val context = LocalContext.current
+    val authState by viewModel.authState.collectAsState()
 
     Scaffold(
         containerColor = Color(0xFF31313D)
@@ -93,7 +98,7 @@ fun RegisterScreen(navController: NavHostController) {
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
-                
+
                 // Name Text Field
                 var name by remember { mutableStateOf("") }
                 OutlinedTextField(
@@ -163,14 +168,21 @@ fun RegisterScreen(navController: NavHostController) {
                 // Login Button
                 Button(
                     onClick = {
-                        //Login
+                        viewModel.register(name, email, password)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
                     colors = ButtonDefaults.buttonColors(Color.White)
                 ) {
-                    Text("Login", color = Color(0xFF31313D), fontWeight = FontWeight.Bold)
+                    if (authState.isLoading) {
+                        CircularProgressIndicator(
+                            color = Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    } else {
+                        Text("Register", color = Color(0xFF31313D), fontWeight = FontWeight.Bold)
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -199,6 +211,22 @@ fun RegisterScreen(navController: NavHostController) {
                         }
                     }
                 )
+                Spacer(modifier = Modifier.height(24.dp))
+                authState.error?.let {
+                    Text(
+                        text = it,
+                        color = Color.Red,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+            }
+            if (authState.isAuthenticated) {
+                // Navigate to the Home Screen
+                LaunchedEffect(Unit) {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Register.route) { inclusive = true }
+                    }
+                }
             }
 
         }
