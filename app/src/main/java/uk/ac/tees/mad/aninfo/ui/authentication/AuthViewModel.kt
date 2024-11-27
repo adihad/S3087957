@@ -5,14 +5,13 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import uk.ac.tees.mad.aninfo.data.AuthRepository
+import uk.ac.tees.mad.aninfo.data.AnimeRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val animeRepository: AnimeRepository
 ) : ViewModel() {
 
     private val _authState = MutableStateFlow(AuthState())
@@ -21,7 +20,7 @@ class AuthViewModel @Inject constructor(
     fun login(email: String, password: String) {
         viewModelScope.launch {
             _authState.value = AuthState(isLoading = true)
-            val result = authRepository.login(email, password)
+            val result = animeRepository.login(email, password)
             _authState.value = AuthState(
                 isLoading = false,
                 isAuthenticated = result.success,
@@ -33,7 +32,7 @@ class AuthViewModel @Inject constructor(
     fun register(name: String, email: String, password: String) {
         viewModelScope.launch {
             _authState.value = AuthState(isLoading = true)
-            val result = authRepository.register(name, email, password)
+            val result = animeRepository.register(name, email, password)
             _authState.value = AuthState(
                 isLoading = false,
                 isAuthenticated = result.success,

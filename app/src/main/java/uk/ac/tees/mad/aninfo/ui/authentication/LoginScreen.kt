@@ -110,7 +110,8 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthViewModel = hil
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.White,
                         unfocusedBorderColor = Color.Gray,
-                        focusedTextColor = Color.White
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
                     )
                 )
 
@@ -128,6 +129,7 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthViewModel = hil
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.White,
                         unfocusedBorderColor = Color.Gray,
+                        unfocusedTextColor = Color.White,
                         focusedTextColor = Color.White
                     ),
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -160,7 +162,7 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthViewModel = hil
                 ) {
                     if (authState.isLoading) {
                         CircularProgressIndicator(
-                            color = Color.White,
+                            color = Color(0xFF31313D),
                             modifier = Modifier.size(24.dp)
                         )
                     } else {

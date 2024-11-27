@@ -3,17 +3,20 @@ package uk.ac.tees.mad.aninfo.data
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import uk.ac.tees.mad.aninfo.models.Anime
 import javax.inject.Inject
 
-interface AuthRepository {
+interface AnimeRepository {
     suspend fun login(email: String, password: String): AuthResult
     suspend fun register(name: String, email: String, password: String): AuthResult
+    suspend fun getTopAnime(): ApiResponse
 }
 
-class AuthRepositoryImpl @Inject constructor(
+class AnimeRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-    private val firestore: FirebaseFirestore
-) : AuthRepository {
+    private val firestore: FirebaseFirestore,
+    private val apiService: JikanApiService
+) : AnimeRepository {
 
     override suspend fun login(email: String, password: String): AuthResult {
         return try {
@@ -39,8 +42,23 @@ class AuthRepositoryImpl @Inject constructor(
             AuthResult(success = false, errorMessage = e.message)
         }
     }
+
+    override suspend fun getTopAnime(): ApiResponse {
+        return try {
+            val response = apiService.getTopAnime()
+            val data = response.body()?.data
+            ApiResponse(data = data ?: emptyList(), errorMessage = null)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ApiResponse(data = emptyList(), errorMessage = e.message)
+        }
+    }
 }
 
+data class ApiResponse(
+    val data: List<Anime>,
+    val errorMessage: String?
+)
 
 data class AuthResult(
     val success: Boolean,

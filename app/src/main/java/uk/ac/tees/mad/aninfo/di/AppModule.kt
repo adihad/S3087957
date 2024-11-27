@@ -7,8 +7,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import uk.ac.tees.mad.aninfo.data.AuthRepository
-import uk.ac.tees.mad.aninfo.data.AuthRepositoryImpl
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import uk.ac.tees.mad.aninfo.data.AnimeRepository
+import uk.ac.tees.mad.aninfo.data.AnimeRepositoryImpl
+import uk.ac.tees.mad.aninfo.data.JikanApiService
 import javax.inject.Singleton
 
 @Module
@@ -29,8 +32,23 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun providesRetrofit() = Retrofit
+        .Builder()
+        .baseUrl("https://api.jikan.moe/v4/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    @Provides
+    @Singleton
+    fun providesApiService(retrofit: Retrofit): JikanApiService =
+        retrofit.create(JikanApiService::class.java)
+
+    @Provides
+    @Singleton
     fun provideAuthRepository(
         auth: FirebaseAuth,
-        firestore: FirebaseFirestore
-    ): AuthRepository = AuthRepositoryImpl(auth, firestore)
+        firestore: FirebaseFirestore,
+        jikanApiService: JikanApiService
+    ): AnimeRepository =
+        AnimeRepositoryImpl(firebaseAuth = auth, firestore = firestore, apiService = jikanApiService)
 }

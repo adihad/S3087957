@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import uk.ac.tees.mad.aninfo.ui.authentication.LoginScreen
 import uk.ac.tees.mad.aninfo.ui.authentication.RegisterScreen
+import uk.ac.tees.mad.aninfo.ui.home.HomeScreen
 import uk.ac.tees.mad.aninfo.ui.splash.SplashScreen
 
 @Composable
@@ -22,7 +23,7 @@ fun AnimeAppNavHost(navController: NavHostController) {
         }
 
         composable(Screen.Home.route) {
-
+            HomeScreen(navController = navController)
         }
         composable(Screen.AnimeDetails.route) {
 

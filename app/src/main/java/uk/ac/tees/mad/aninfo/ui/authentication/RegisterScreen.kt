@@ -110,7 +110,8 @@ fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel = 
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.White,
                         unfocusedBorderColor = Color.Gray,
-                        focusedTextColor = Color.White
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White
                     )
                 )
 
@@ -127,7 +128,8 @@ fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel = 
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.White,
                         unfocusedBorderColor = Color.Gray,
-                        focusedTextColor = Color.White
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White
                     )
                 )
 
@@ -145,7 +147,8 @@ fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel = 
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.White,
                         unfocusedBorderColor = Color.Gray,
-                        focusedTextColor = Color.White
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White
                     ),
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
@@ -177,7 +180,7 @@ fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel = 
                 ) {
                     if (authState.isLoading) {
                         CircularProgressIndicator(
-                            color = Color.White,
+                            color = Color(0xFF31313D),
                             modifier = Modifier.size(24.dp)
                         )
                     } else {

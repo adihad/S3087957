@@ -28,6 +28,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -38,6 +40,7 @@ import uk.ac.tees.mad.aninfo.navigation.Screen
 fun SplashScreen(navController: NavHostController) {
     // Define a state for the animation
     val scale = remember { Animatable(0f) }
+    val firebaseAuth = Firebase.auth
 
     // Start the animation when the screen is first composed
     LaunchedEffect(key1 = true) {
@@ -48,9 +51,9 @@ fun SplashScreen(navController: NavHostController) {
             })
         )
         delay(3000) // Hold the splash screen for 2 seconds
-        // Navigate based on authentication status (placeholder for real check)
+        val isAuthenticated = firebaseAuth.currentUser != null
         launch(Dispatchers.Main) {
-            navController.navigate(Screen.Login.route) {
+            navController.navigate(if (isAuthenticated) Screen.Home.route else Screen.Login.route) {
                 popUpTo(Screen.Splash.route) { inclusive = true }
             }
         }
