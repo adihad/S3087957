@@ -10,6 +10,8 @@ interface AnimeRepository {
     suspend fun login(email: String, password: String): AuthResult
     suspend fun register(name: String, email: String, password: String): AuthResult
     suspend fun getTopAnime(): ApiResponse
+    suspend fun searchAnime(query: String): ApiResponse
+    suspend fun getAnimeById(id: String): ApiResponse
 }
 
 class AnimeRepositoryImpl @Inject constructor(
@@ -46,6 +48,28 @@ class AnimeRepositoryImpl @Inject constructor(
     override suspend fun getTopAnime(): ApiResponse {
         return try {
             val response = apiService.getTopAnime()
+            val data = response.body()?.data
+            ApiResponse(data = data ?: emptyList(), errorMessage = null)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ApiResponse(data = emptyList(), errorMessage = e.message)
+        }
+    }
+
+    override suspend fun searchAnime(query: String): ApiResponse {
+        return try {
+            val response = apiService.searchAnime(query)
+            val data = response.body()?.data
+            ApiResponse(data = data ?: emptyList(), errorMessage = null)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ApiResponse(data = emptyList(), errorMessage = e.message)
+        }
+    }
+
+    override suspend fun getAnimeById(id: String): ApiResponse {
+        return try {
+            val response = apiService.getAnimeById(id)
             val data = response.body()?.data
             ApiResponse(data = data ?: emptyList(), errorMessage = null)
         } catch (e: Exception) {
