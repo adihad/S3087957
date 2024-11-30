@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
@@ -26,7 +27,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -36,11 +36,15 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -54,6 +58,9 @@ import uk.ac.tees.mad.aninfo.navigation.Screen
 fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
     val animeState by viewModel.animeList.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+
+    var searchQuery by remember { mutableStateOf("") }
+
     Scaffold(
         containerColor = Color(0xFF31313D),
         topBar = {
@@ -93,6 +100,40 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
                     .background(Color(0xFF31313D))
                     .padding(16.dp)
             ) {
+                // Search Bar
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = {
+                        searchQuery = it
+                    },
+                    label = { Text("Search Anime") },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    leadingIcon = {
+                        IconButton(onClick = {
+                            viewModel.searchAnime(searchQuery)
+                        }
+                        ) {
+                            Icon(Icons.Default.Search, contentDescription = null)
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedLabelColor = Color.White,
+                        unfocusedLabelColor = Color.Black,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        focusedBorderColor = Color.Gray,
+                        unfocusedBorderColor = Color.Gray,
+                        cursorColor = Color.Black
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // Anime List
                 if (isLoading) {
@@ -102,17 +143,14 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
                     )
                 } else {
                     LazyColumn {
-                        item {
-                            Text(
-                                text = "You top Anime here.",
-                                style = MaterialTheme.typography.titleSmall,
-                                color = Color.White
-                            )
-
-                            Spacer(modifier = Modifier.height(16.dp))
-                        }
                         items(animeState.data) { anime ->
-                            AnimeItem(anime)
+                            if (anime.mal_id == 0 || anime.title.isEmpty()) return@items
+                            AnimeItem(
+                                anime = anime,
+                                onClick = {
+                                    navController.navigate("${Screen.AnimeDetails.route}/${anime.mal_id}")
+                                }
+                            )
                         }
                     }
                 }
@@ -122,12 +160,12 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
 }
 
 @Composable
-fun AnimeItem(anime: Anime) {
+fun AnimeItem(anime: Anime, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable { /* Navigate to Anime Details Screen */ },
+            .padding(vertical = 8.dp),
+        onClick = onClick,
         colors = CardDefaults.cardColors(Color(0xFF424242))
     ) {
         Row(

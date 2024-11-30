@@ -22,6 +22,8 @@ class HomeViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
+    private var currentQuery: String? = null
+
     init {
         fetchTopAnime()
     }
@@ -32,6 +34,20 @@ class HomeViewModel @Inject constructor(
             val anime = animeRepository.getTopAnime()
             _animeList.value = anime
             _isLoading.value = false
+        }
+    }
+
+    fun searchAnime(query: String) {
+        if (query.isEmpty() && currentQuery != null) {
+            fetchTopAnime()
+            currentQuery = null
+        } else {
+            viewModelScope.launch {
+                _isLoading.value = true
+                _animeList.value = animeRepository.searchAnime(query)
+                _isLoading.value = false
+                currentQuery = query
+            }
         }
     }
 }

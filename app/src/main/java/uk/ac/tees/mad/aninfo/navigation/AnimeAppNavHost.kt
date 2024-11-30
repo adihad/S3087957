@@ -2,8 +2,11 @@ package uk.ac.tees.mad.aninfo.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import uk.ac.tees.mad.aninfo.ui.animedetail.AnimeDetailsScreen
 import uk.ac.tees.mad.aninfo.ui.authentication.LoginScreen
 import uk.ac.tees.mad.aninfo.ui.authentication.RegisterScreen
 import uk.ac.tees.mad.aninfo.ui.home.HomeScreen
@@ -25,9 +28,14 @@ fun AnimeAppNavHost(navController: NavHostController) {
         composable(Screen.Home.route) {
             HomeScreen(navController = navController)
         }
-        composable(Screen.AnimeDetails.route) {
-
+        composable(
+            route = "${Screen.AnimeDetails.route}/{animeId}",
+            arguments = listOf(navArgument("animeId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val animeId = backStackEntry.arguments?.getInt("animeId") ?: 0
+            AnimeDetailsScreen(animeId = animeId, navController = navController)
         }
+
         composable(Screen.Watchlist.route) {
 
         }
