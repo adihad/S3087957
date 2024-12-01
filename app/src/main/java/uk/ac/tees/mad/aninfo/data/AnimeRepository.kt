@@ -1,7 +1,9 @@
 package uk.ac.tees.mad.aninfo.data
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.protobuf.Api
 import kotlinx.coroutines.tasks.await
 import uk.ac.tees.mad.aninfo.models.Anime
 import javax.inject.Inject
@@ -9,9 +11,9 @@ import javax.inject.Inject
 interface AnimeRepository {
     suspend fun login(email: String, password: String): AuthResult
     suspend fun register(name: String, email: String, password: String): AuthResult
-    suspend fun getTopAnime(): ApiResponse
-    suspend fun searchAnime(query: String): ApiResponse
-    suspend fun getAnimeById(id: String): ApiResponse
+    suspend fun getTopAnime(): ListApiResponse
+    suspend fun searchAnime(query: String): ListApiResponse
+    suspend fun getAnimeById(id: Int): ApiResponse
 }
 
 class AnimeRepositoryImpl @Inject constructor(
@@ -45,42 +47,48 @@ class AnimeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getTopAnime(): ApiResponse {
+    override suspend fun getTopAnime(): ListApiResponse {
         return try {
             val response = apiService.getTopAnime()
             val data = response.body()?.data
-            ApiResponse(data = data ?: emptyList(), errorMessage = null)
+            ListApiResponse(data = data ?: emptyList(), errorMessage = null)
         } catch (e: Exception) {
             e.printStackTrace()
-            ApiResponse(data = emptyList(), errorMessage = e.message)
+            ListApiResponse(data = emptyList(), errorMessage = e.message)
         }
     }
 
-    override suspend fun searchAnime(query: String): ApiResponse {
+    override suspend fun searchAnime(query: String): ListApiResponse {
         return try {
             val response = apiService.searchAnime(query)
             val data = response.body()?.data
-            ApiResponse(data = data ?: emptyList(), errorMessage = null)
+            ListApiResponse(data = data ?: emptyList(), errorMessage = null)
         } catch (e: Exception) {
             e.printStackTrace()
-            ApiResponse(data = emptyList(), errorMessage = e.message)
+            ListApiResponse(data = emptyList(), errorMessage = e.message)
         }
     }
 
-    override suspend fun getAnimeById(id: String): ApiResponse {
+    override suspend fun getAnimeById(id: Int): ApiResponse {
         return try {
-            val response = apiService.getAnimeById(id)
+            val response = apiService.getAnimeById(id.toString())
+            Log.d("ANIM", response.toString())
             val data = response.body()?.data
-            ApiResponse(data = data ?: emptyList(), errorMessage = null)
+            ApiResponse(data = data, errorMessage = null)
         } catch (e: Exception) {
             e.printStackTrace()
-            ApiResponse(data = emptyList(), errorMessage = e.message)
+            ApiResponse(data = null, errorMessage = e.message)
         }
     }
 }
 
-data class ApiResponse(
+data class ListApiResponse(
     val data: List<Anime>,
+    val errorMessage: String?
+)
+
+data class ApiResponse(
+    val data: Anime?,
     val errorMessage: String?
 )
 

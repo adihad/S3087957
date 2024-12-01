@@ -31,9 +31,8 @@ fun AnimeAppNavHost(navController: NavHostController) {
         composable(
             route = "${Screen.AnimeDetails.route}/{animeId}",
             arguments = listOf(navArgument("animeId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val animeId = backStackEntry.arguments?.getInt("animeId") ?: 0
-            AnimeDetailsScreen(animeId = animeId, navController = navController)
+        ) {
+            AnimeDetailsScreen(navController = navController)
         }
 
         composable(Screen.Watchlist.route) {

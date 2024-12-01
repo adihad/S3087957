@@ -15,15 +15,23 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AnimeDetailsScreen(navController: NavHostController, animeId: Int) {
+fun AnimeDetailsScreen(
+    navController: NavHostController,
+    viewModel: AnimeDetailsViewModel = hiltViewModel()
+) {
+    val anime by viewModel.anime.collectAsState()
+
     Scaffold(
         containerColor = Color(0xFF31313D),
         topBar = {
@@ -64,7 +72,7 @@ fun AnimeDetailsScreen(navController: NavHostController, animeId: Int) {
                     .padding(16.dp)
             ) {
 
-                Text(text = "$animeId", color = Color.White)
+                Text(text = "$anime", color = Color.White)
             }
         }
     }

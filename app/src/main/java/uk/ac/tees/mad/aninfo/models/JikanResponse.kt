@@ -6,11 +6,23 @@ data class JikanResponse(
     @SerializedName("data") val data: List<Anime>
 )
 
+data class JikanAnimeResponse(
+    @SerializedName("data") val data: Anime
+)
+
 data class Anime(
     val mal_id: Int,
     val title: String,
+    val synopsis: String,
+    val score: Double?,
+    val episodes: Int?,
     val images: AnimeImages,
-    val synopsis: String
+    val airing: Boolean,
+    val genres: List<Genre>
+)
+
+data class Genre(
+    val name: String
 )
 
 data class AnimeImages(

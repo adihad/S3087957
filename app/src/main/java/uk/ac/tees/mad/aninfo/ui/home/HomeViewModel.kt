@@ -7,8 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import uk.ac.tees.mad.aninfo.data.AnimeRepository
-import uk.ac.tees.mad.aninfo.data.ApiResponse
-import uk.ac.tees.mad.aninfo.models.Anime
+import uk.ac.tees.mad.aninfo.data.ListApiResponse
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,7 +15,7 @@ class HomeViewModel @Inject constructor(
     private val animeRepository: AnimeRepository
 ) : ViewModel() {
 
-    private val _animeList = MutableStateFlow<ApiResponse>(ApiResponse(emptyList(), null))
+    private val _animeList = MutableStateFlow<ListApiResponse>(ListApiResponse(emptyList(), null))
     val animeList = _animeList.asStateFlow()
 
     private val _isLoading = MutableStateFlow(true)
