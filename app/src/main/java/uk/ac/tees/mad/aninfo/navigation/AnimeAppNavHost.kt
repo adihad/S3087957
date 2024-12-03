@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import uk.ac.tees.mad.aninfo.ui.WebViewScreen
 import uk.ac.tees.mad.aninfo.ui.animedetail.AnimeDetailsScreen
 import uk.ac.tees.mad.aninfo.ui.authentication.LoginScreen
 import uk.ac.tees.mad.aninfo.ui.authentication.RegisterScreen
@@ -43,6 +44,20 @@ fun AnimeAppNavHost(navController: NavHostController) {
         }
         composable(Screen.EditProfile.route) {
 
+        }
+
+        composable(
+            route = Screen.WebView.route,
+            arguments = listOf(
+                navArgument("url") {
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val urlString = backStackEntry.arguments?.getString("url")?.replace("%2F", "/")
+            urlString?.let {
+                WebViewScreen(navController = navController, urlString = it)
+            } ?: navController.popBackStack()
         }
     }
 }

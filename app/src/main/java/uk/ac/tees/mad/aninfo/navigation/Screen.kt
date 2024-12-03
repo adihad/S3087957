@@ -9,4 +9,7 @@ sealed class Screen(val route: String) {
     object Watchlist : Screen("watchlist")
     object Profile : Screen("profile")
     object EditProfile : Screen("edit_profile")
+    object WebView : Screen("webview/{url}") {
+        fun createRoute(url: String) = "webview/$url"
+    }
 }

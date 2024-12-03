@@ -18,6 +18,7 @@ data class Anime(
     val episodes: Int?,
     val images: AnimeImages,
     val airing: Boolean,
+    val url: String,
     val genres: List<Genre>
 )
 
