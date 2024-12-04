@@ -14,11 +14,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -173,11 +175,21 @@ fun AnimeDetailsScreen(
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     // Watch button
-                    Button(onClick = {
-                        val hashedUrl = anime.url.replace("/", "%2F")
-                        navController.navigate(Screen.WebView.createRoute(hashedUrl))
-                    }) {
-                        Text(text = "Watch")
+                    Button(
+                        onClick = {
+                            val hashedUrl = anime.url.replace("/", "%2F")
+                            navController.navigate(Screen.WebView.createRoute(hashedUrl))
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(Color(0xFF3D5AFE))
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.PlayArrow,
+                            contentDescription = "Play",
+                            tint = Color.White
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = "Watch", color = Color.White)
                     }
                 }
             } ?: run {

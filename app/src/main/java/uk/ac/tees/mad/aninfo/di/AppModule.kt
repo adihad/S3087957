@@ -12,6 +12,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import uk.ac.tees.mad.aninfo.data.AnimeRepository
 import uk.ac.tees.mad.aninfo.data.AnimeRepositoryImpl
 import uk.ac.tees.mad.aninfo.data.JikanApiService
+import uk.ac.tees.mad.aninfo.data.WatchlistDao
+import uk.ac.tees.mad.aninfo.data.WatchlistRepository
+import uk.ac.tees.mad.aninfo.data.WatchlistRepositoryImpl
 import javax.inject.Singleton
 
 @Module
@@ -42,6 +45,22 @@ object AppModule {
     @Singleton
     fun providesApiService(retrofit: Retrofit): JikanApiService =
         retrofit.create(JikanApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAnimeDatabase(application: Application): AnimeDatabase =
+        Room.databaseBuilder(
+            application.applicationContext,
+
+    @Provides
+    @Singleton
+    fun provideWatchlistDao(animeDatabase: AnimeDatabase): WatchlistDao =
+        animeDatabase.watchlistDao()
+
+    @Provides
+    @Singleton
+    fun provideWatchlistRepository(watchlistDao: WatchlistDao): WatchlistRepository =
+        WatchlistRepositoryImpl(watchlistDao)
 
     @Provides
     @Singleton
