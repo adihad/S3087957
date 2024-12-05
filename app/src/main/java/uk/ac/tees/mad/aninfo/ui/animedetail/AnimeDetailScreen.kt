@@ -58,9 +58,7 @@ fun AnimeDetailsScreen(
     viewModel: AnimeDetailsViewModel = hiltViewModel()
 ) {
     val anime by viewModel.anime.collectAsState()
-    val isInWatchlist by remember {
-        mutableStateOf(false)
-    }
+    val isInWatchlist by viewModel.isInWatchlist.collectAsState()
 
     Scaffold(
         containerColor = Color(0xFF31313D),
@@ -161,7 +159,7 @@ fun AnimeDetailsScreen(
                     // Add/Remove Watchlist Button
                     Button(
                         onClick = {
-
+                            viewModel.toggleWatchlist()
                         },
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(

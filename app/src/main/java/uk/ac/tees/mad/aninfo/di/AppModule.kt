@@ -1,5 +1,7 @@
 package uk.ac.tees.mad.aninfo.di
 
+import android.app.Application
+import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -9,6 +11,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import uk.ac.tees.mad.aninfo.data.AnimeDatabase
 import uk.ac.tees.mad.aninfo.data.AnimeRepository
 import uk.ac.tees.mad.aninfo.data.AnimeRepositoryImpl
 import uk.ac.tees.mad.aninfo.data.JikanApiService
@@ -51,6 +54,9 @@ object AppModule {
     fun provideAnimeDatabase(application: Application): AnimeDatabase =
         Room.databaseBuilder(
             application.applicationContext,
+            AnimeDatabase::class.java,
+            "anime_database"
+        ).build()
 
     @Provides
     @Singleton
@@ -69,5 +75,9 @@ object AppModule {
         firestore: FirebaseFirestore,
         jikanApiService: JikanApiService
     ): AnimeRepository =
-        AnimeRepositoryImpl(firebaseAuth = auth, firestore = firestore, apiService = jikanApiService)
+        AnimeRepositoryImpl(
+            firebaseAuth = auth,
+            firestore = firestore,
+            apiService = jikanApiService
+        )
 }

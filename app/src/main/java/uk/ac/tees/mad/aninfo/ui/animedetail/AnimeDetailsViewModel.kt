@@ -9,12 +9,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import uk.ac.tees.mad.aninfo.data.AnimeRepository
+import uk.ac.tees.mad.aninfo.data.WatchlistRepository
 import uk.ac.tees.mad.aninfo.models.Anime
 import javax.inject.Inject
 
 @HiltViewModel
 class AnimeDetailsViewModel @Inject constructor(
     private val animeRepository: AnimeRepository,
+    private val watchlistRepository: WatchlistRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -27,17 +29,27 @@ class AnimeDetailsViewModel @Inject constructor(
     private val _anime = MutableStateFlow<Anime?>(null)
     val anime = _anime.asStateFlow()
 
-    private val _isLoading = MutableStateFlow(true)
-    val isLoading = _isLoading.asStateFlow()
-
+    private val _isInWatchlist = MutableStateFlow(false)
+    val isInWatchlist = _isInWatchlist.asStateFlow()
 
     private fun loadAnimeDetails(animeId: Int) {
         viewModelScope.launch {
             val anime = animeRepository.getAnimeById(animeId)
-            Log.d("ANIM", anime.toString())
-
             _anime.value = anime.data
-            _isLoading.value = false
+            _isInWatchlist.value = watchlistRepository.isAnimeInWatchlist(animeId)
+        }
+    }
+
+    fun toggleWatchlist() {
+        viewModelScope.launch {
+            _anime.value?.let { anime ->
+                if (_isInWatchlist.value) {
+                    watchlistRepository.removeAnimeFromWatchlist(anime)
+                } else {
+                    watchlistRepository.addAnimeToWatchlist(anime)
+                }
+                _isInWatchlist.value = !_isInWatchlist.value
+            }
         }
     }
 
