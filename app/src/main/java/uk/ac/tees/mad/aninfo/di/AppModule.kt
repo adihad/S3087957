@@ -15,6 +15,7 @@ import uk.ac.tees.mad.aninfo.data.AnimeDatabase
 import uk.ac.tees.mad.aninfo.data.AnimeRepository
 import uk.ac.tees.mad.aninfo.data.AnimeRepositoryImpl
 import uk.ac.tees.mad.aninfo.data.JikanApiService
+import uk.ac.tees.mad.aninfo.data.UserRepository
 import uk.ac.tees.mad.aninfo.data.WatchlistDao
 import uk.ac.tees.mad.aninfo.data.WatchlistRepository
 import uk.ac.tees.mad.aninfo.data.WatchlistRepositoryImpl
@@ -80,4 +81,12 @@ object AppModule {
             firestore = firestore,
             apiService = jikanApiService
         )
+
+    @Provides
+    @Singleton
+    fun providesUserRepository(
+        auth: FirebaseAuth,
+        firestore: FirebaseFirestore
+    ) = UserRepository(firestore = firestore, auth = auth)
+
 }
