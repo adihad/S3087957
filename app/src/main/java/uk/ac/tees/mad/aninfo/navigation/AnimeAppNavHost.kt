@@ -11,6 +11,7 @@ import uk.ac.tees.mad.aninfo.ui.animedetail.AnimeDetailsScreen
 import uk.ac.tees.mad.aninfo.ui.authentication.LoginScreen
 import uk.ac.tees.mad.aninfo.ui.authentication.RegisterScreen
 import uk.ac.tees.mad.aninfo.ui.home.HomeScreen
+import uk.ac.tees.mad.aninfo.ui.profile.ProfileScreen
 import uk.ac.tees.mad.aninfo.ui.splash.SplashScreen
 
 @Composable
@@ -40,7 +41,7 @@ fun AnimeAppNavHost(navController: NavHostController) {
 
         }
         composable(Screen.Profile.route) {
-
+            ProfileScreen(navController = navController)
         }
         composable(Screen.EditProfile.route) {
 
