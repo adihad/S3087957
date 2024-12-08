@@ -15,4 +15,9 @@ class UserRepository @Inject constructor(
         val document = firestore.collection("users").document(userId).get().await()
         return document.toObject(User::class.java)
     }
+
+    suspend fun updateUserProfile(user: User) {
+        val userId = auth.currentUser?.uid ?: return
+        firestore.collection("users").document(userId).set(user).await()
+    }
 }
