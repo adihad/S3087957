@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import uk.ac.tees.mad.aninfo.models.AnimeEntity
 
 @Dao
@@ -17,4 +18,8 @@ interface WatchlistDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM anime_table WHERE mal_id = :animeId)")
     suspend fun isAnimeInWatchlist(animeId: Int): Boolean
+
+
+    @Query("SELECT * FROM anime_table")
+    fun getWatchlist(): Flow<List<AnimeEntity>>
 }

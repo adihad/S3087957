@@ -1,6 +1,9 @@
 package uk.ac.tees.mad.aninfo.data
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import uk.ac.tees.mad.aninfo.models.Anime
+import uk.ac.tees.mad.aninfo.models.AnimeEntity
 import uk.ac.tees.mad.aninfo.models.toEntity
 import javax.inject.Inject
 
@@ -8,6 +11,7 @@ interface WatchlistRepository {
     suspend fun addAnimeToWatchlist(anime: Anime)
     suspend fun removeAnimeFromWatchlist(anime: Anime)
     suspend fun isAnimeInWatchlist(animeId: Int): Boolean
+    fun getWatchlist(): Flow<List<AnimeEntity>>
 }
 
 class WatchlistRepositoryImpl @Inject constructor(
@@ -24,5 +28,9 @@ class WatchlistRepositoryImpl @Inject constructor(
 
     override suspend fun isAnimeInWatchlist(animeId: Int): Boolean {
         return watchlistDao.isAnimeInWatchlist(animeId)
+    }
+
+    override fun getWatchlist(): Flow<List<AnimeEntity>> {
+        return watchlistDao.getWatchlist()
     }
 }

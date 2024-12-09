@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -53,6 +54,10 @@ fun ProfileScreen(
 ) {
     val userProfile by viewModel.userProfile.collectAsState()
     val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.loadUserProfile()
+    }
 
     Scaffold(
         containerColor = Color(0xFF31313D),
@@ -98,7 +103,9 @@ fun ProfileScreen(
                     Spacer(modifier = Modifier.height(24.dp))
                     // Profile Picture
                     Image(
-                        painter = rememberAsyncImagePainter("https://avatar.iran.liara.run/public"),
+                        painter = rememberAsyncImagePainter(
+                            userProfile?.profilePictureUrl?.ifEmpty { "https://avatar.iran.liara.run/public" }
+                        ),
                         contentDescription = null,
                         modifier = Modifier
                             .size(120.dp)

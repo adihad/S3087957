@@ -16,8 +16,12 @@ class UserRepository @Inject constructor(
         return document.toObject(User::class.java)
     }
 
-    suspend fun updateUserProfile(user: User) {
+    fun updateUserProfile(user: User, authResult: (AuthResult) -> Unit) {
         val userId = auth.currentUser?.uid ?: return
-        firestore.collection("users").document(userId).set(user).await()
+        firestore.collection("users").document(userId).set(user).addOnSuccessListener {
+            authResult(AuthResult(true, "Profile updated successfully"))
+        }.addOnFailureListener {
+            authResult(AuthResult(false, "Failed to update profile"))
+        }
     }
 }
