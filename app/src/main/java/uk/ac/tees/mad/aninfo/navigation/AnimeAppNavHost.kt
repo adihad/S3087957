@@ -14,6 +14,7 @@ import uk.ac.tees.mad.aninfo.ui.home.HomeScreen
 import uk.ac.tees.mad.aninfo.ui.profile.EditProfileScreen
 import uk.ac.tees.mad.aninfo.ui.profile.ProfileScreen
 import uk.ac.tees.mad.aninfo.ui.splash.SplashScreen
+import uk.ac.tees.mad.aninfo.ui.watchlist.WatchlistScreen
 
 @Composable
 fun AnimeAppNavHost(navController: NavHostController) {
@@ -39,7 +40,7 @@ fun AnimeAppNavHost(navController: NavHostController) {
         }
 
         composable(Screen.Watchlist.route) {
-
+            WatchlistScreen(navController = navController)
         }
         composable(Screen.Profile.route) {
             ProfileScreen(navController = navController)

@@ -17,6 +17,10 @@ class WatchlistViewModel @Inject constructor(
     private val repository: WatchlistRepository
 ) : ViewModel() {
 
+    suspend fun removeAnimeFromWatchlist(anime: Anime) {
+        repository.removeAnimeFromWatchlist(anime)
+    }
+
     val watchlist: StateFlow<List<AnimeEntity>> = repository.getWatchlist()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 }
