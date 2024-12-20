@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
@@ -69,13 +70,21 @@ fun WatchlistScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Watchlist") },
+                title = { Text("Your Watchlist") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color(0xFF31313D),
-                    titleContentColor = Color.White
-                )
+                    titleContentColor = Color.White,
+                    actionIconContentColor = Color.White,
+                    navigationIconContentColor = Color.White
+                ),
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                }
             )
-        }
+        },
+        containerColor = Color(0xFF31313D).copy(alpha = 0.8f),
     ) { paddingValues ->
         if (watchlist.isEmpty()) {
             // Show Empty State
@@ -95,7 +104,7 @@ fun WatchlistScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .background(Color(0xFF31313D))
+                    .background(Color(0xFF31313D).copy(alpha = 0.8f))
             ) {
                 items(watchlist) { anime ->
                     WatchlistItem(

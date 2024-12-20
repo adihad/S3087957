@@ -73,7 +73,6 @@ class ProfileViewModel @Inject constructor(
 
     fun uploadProfilePicture(uri: Uri) {
         viewModelScope.launch {
-            _isLoading.value = true
             val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return@launch
             val ref = storage.reference.child("profile_pictures/$userId.jpg")
             ref.putFile(uri).await()
@@ -83,12 +82,11 @@ class ProfileViewModel @Inject constructor(
                 userRepository.updateUserProfile(
                     it, authResult = { result ->
                         if (result.success) {
-
+                            loadUserProfile()
                         }
                     }
                 )
             }
-            _isLoading.value = false
         }
     }
 
