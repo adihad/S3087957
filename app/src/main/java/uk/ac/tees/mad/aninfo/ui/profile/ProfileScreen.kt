@@ -3,8 +3,11 @@ package uk.ac.tees.mad.aninfo.ui.profile
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -23,6 +27,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -30,6 +35,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import uk.ac.tees.mad.aninfo.PreferencesHelper
 import uk.ac.tees.mad.aninfo.navigation.Screen
 
 
@@ -52,8 +61,11 @@ fun ProfileScreen(
     navController: NavHostController,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
-    val userProfile by viewModel.userProfile.collectAsState()
     val context = LocalContext.current
+    val preferencesHelper = remember { PreferencesHelper(context) }
+    var isBiometricAuthEnabled by remember { mutableStateOf(preferencesHelper.isBiometricAuthEnabled()) }
+
+    val userProfile by viewModel.userProfile.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.loadUserProfile()
@@ -136,32 +148,76 @@ fun ProfileScreen(
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(50.dp)
+                            .background(Color(0xFF3D5AFE), RoundedCornerShape(16.dp))
+                            .padding(horizontal = 16.dp)
+                            .clip(RoundedCornerShape(16.dp)),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = "Biometric authentication", color = Color.White)
+
+                        Switch(
+                            checked = isBiometricAuthEnabled,
+                            onCheckedChange = { checked ->
+                                isBiometricAuthEnabled = checked
+                                preferencesHelper.setBiometricAuthEnabled(checked)
+                            }
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     // Edit Profile Button
-                    Button(
-                        onClick = {
-                            navController.navigate(Screen.EditProfile.route)
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(Color(0xFF3D5AFE)),
-                        shape = RoundedCornerShape(16.dp)
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(50.dp)
+                            .background(Color(0xFF3D5AFE), RoundedCornerShape(16.dp))
+                            .padding(horizontal = 16.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .clickable {
+                                navController.navigate(Screen.EditProfile.route)
+                            },
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Edit profile", color = Color.White)
+
+                        Icon(
+                            imageVector = Icons.Default.ChevronRight,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+
                     }
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Watchlist screen
-                    Button(
-                        onClick = {
-                            navController.navigate(Screen.Watchlist.route)
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(Color(0xFF3D5AFE)),
-                        shape = RoundedCornerShape(16.dp)
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(50.dp)
+                            .background(Color(0xFF3D5AFE), RoundedCornerShape(16.dp))
+                            .padding(horizontal = 16.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .clickable {
+                                navController.navigate(Screen.Watchlist.route)
+                            },
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Your watchlist", color = Color.White)
-                    }
 
+                        Icon(
+                            imageVector = Icons.Default.ChevronRight,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Logout Button
@@ -172,7 +228,7 @@ fun ProfileScreen(
                                 popUpTo("login") { inclusive = true }
                             }
                         },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().height(50.dp),
                         colors = ButtonDefaults.buttonColors(Color.Red),
                         shape = RoundedCornerShape(16.dp)
 

@@ -1,5 +1,6 @@
 package uk.ac.tees.mad.aninfo.ui.authentication
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,8 +45,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import uk.ac.tees.mad.aninfo.PreferencesHelper
 import uk.ac.tees.mad.aninfo.R
 import uk.ac.tees.mad.aninfo.navigation.Screen
 
@@ -53,6 +56,52 @@ import uk.ac.tees.mad.aninfo.navigation.Screen
 fun LoginScreen(navController: NavHostController, viewModel: AuthViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val authState by viewModel.authState.collectAsState()
+    val preferencesHelper = remember { PreferencesHelper(context) }
+    var isBiometricAuthEnabled by remember { mutableStateOf(preferencesHelper.isBiometricAuthEnabled()) }
+
+
+    LaunchedEffect(Unit) {
+        if (isBiometricAuthEnabled) {
+//            if (!Biometric.status(context)) {
+//                Toast.makeText(
+//                    context,
+//                    Biometric.statusName(context),
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//                return@LaunchedEffect
+//            }
+
+            Biometric.authenticate(
+                context as FragmentActivity,
+                title = "Biometric Authentication",
+                subtitle = "Authenticate to proceed",
+                description = "Authentication is must",
+                negativeText = "Cancel",
+                onSuccess = {
+                    navController.navigate(Screen.Home.route)
+                },
+                onError = { errorCode, errorString ->
+
+                    Toast.makeText(
+                        context,
+                        "Authentication error: $errorCode, $errorString",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+
+                },
+                onFailed = {
+                    Toast.makeText(
+                        context,
+                        "Authentication failed",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+
+                }
+            )
+        }
+    }
 
     Scaffold(
         containerColor = Color(0xFF31313D)

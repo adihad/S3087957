@@ -76,6 +76,7 @@ dependencies {
 
     // Dagger Hilt for dependency injection
     implementation ("com.google.dagger:hilt-android:2.47")
+    implementation(libs.androidx.appcompat)
     ksp ("com.google.dagger:hilt-compiler:2.47")
     implementation( "androidx.hilt:hilt-navigation-compose:1.0.0")
 
