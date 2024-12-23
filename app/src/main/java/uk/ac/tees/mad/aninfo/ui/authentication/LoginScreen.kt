@@ -48,6 +48,8 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import uk.ac.tees.mad.aninfo.PreferencesHelper
 import uk.ac.tees.mad.aninfo.R
 import uk.ac.tees.mad.aninfo.navigation.Screen
@@ -61,7 +63,8 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthViewModel = hil
 
 
     LaunchedEffect(Unit) {
-        if (isBiometricAuthEnabled) {
+        if (Firebase.auth.currentUser != null) {
+            if (isBiometricAuthEnabled) {
 //            if (!Biometric.status(context)) {
 //                Toast.makeText(
 //                    context,
@@ -71,35 +74,38 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthViewModel = hil
 //                return@LaunchedEffect
 //            }
 
-            Biometric.authenticate(
-                context as FragmentActivity,
-                title = "Biometric Authentication",
-                subtitle = "Authenticate to proceed",
-                description = "Authentication is must",
-                negativeText = "Cancel",
-                onSuccess = {
-                    navController.navigate(Screen.Home.route)
-                },
-                onError = { errorCode, errorString ->
+                Biometric.authenticate(
+                    context as FragmentActivity,
+                    title = "Biometric Authentication",
+                    subtitle = "Authenticate to proceed",
+                    description = "Authentication is must",
+                    negativeText = "Cancel",
+                    onSuccess = {
+                        navController.navigate(Screen.Home.route)
+                    },
+                    onError = { errorCode, errorString ->
 
-                    Toast.makeText(
-                        context,
-                        "Authentication error: $errorCode, $errorString",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+                        Toast.makeText(
+                            context,
+                            "Authentication error: $errorCode, $errorString",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
 
-                },
-                onFailed = {
-                    Toast.makeText(
-                        context,
-                        "Authentication failed",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    },
+                    onFailed = {
+                        Toast.makeText(
+                            context,
+                            "Authentication failed",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
 
-                }
-            )
+                    }
+                )
+            } else {
+                navController.navigate(Screen.Home.route)
+            }
         }
     }
 

@@ -53,7 +53,7 @@ fun SplashScreen(navController: NavHostController) {
         delay(3000) // Hold the splash screen for 2 seconds
         val isAuthenticated = firebaseAuth.currentUser != null
         launch(Dispatchers.Main) {
-            navController.navigate(if (isAuthenticated) Screen.Home.route else Screen.Login.route) {
+            navController.navigate(Screen.Login.route) {
                 popUpTo(Screen.Splash.route) { inclusive = true }
             }
         }
@@ -63,7 +63,7 @@ fun SplashScreen(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF31313D)), // Your primary color
+            .background(Color(0xFF31313D)),
         contentAlignment = Alignment.Center
     ) {
         Column(
